@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace Pargos.Tests
 {
     [TestFixture]
-    public class FixedIndexTests
+    public class NumericIndexTests
     {
         [Test]
         public void GetValueByIndexShouldReturnIt()
@@ -18,7 +18,7 @@ namespace Pargos.Tests
         }
 
         [Test]
-        public void GetValueByIndexOutOfRangeShouldReturnNull()
+        public void GetValueByIndexShouldReturnNull()
         {
             string[] args = { "abc", "cde" };
             ArgumentCollection collection = ArgumentFactory.Parse(args);
@@ -40,7 +40,7 @@ namespace Pargos.Tests
         }
 
         [Test]
-        public void GetValueByNegativeIndexOutOfRangeShouldReturnNull()
+        public void GetValueByNegativeIndexShouldReturnNull()
         {
             string[] args = { "abc", "cde" };
             ArgumentCollection collection = ArgumentFactory.Parse(args);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Pargos
 {
@@ -14,22 +13,93 @@ namespace Pargos
 
         public bool Any()
         {
+            foreach (ArgumentToken token in ArgumentReader.Open(args))
+            {
+                switch (token.Type)
+                {
+                    case ArgumentTokenType.Value:
+                    case ArgumentTokenType.Long:
+                    case ArgumentTokenType.Short:
+
+                        return true;
+                }
+            }
+
             return false;
         }
 
         public int Count()
         {
-            return 0;
+            int count = 0;
+            bool ignore = false;
+
+            foreach (ArgumentToken token in ArgumentReader.Open(args))
+            {
+                switch (token.Type)
+                {
+                    case ArgumentTokenType.Value:
+
+                        if (ignore == false) count++;
+                        break;
+
+                    case ArgumentTokenType.Long:
+                    case ArgumentTokenType.Short:
+
+                        ignore = true;
+                        break;
+                }
+            }
+
+            return count;
         }
 
-        public bool Has(int index)
+        public int Count(string name)
         {
-            return false;
+            int count = 0;
+            bool found = false;
+
+            foreach (ArgumentToken token in ArgumentReader.Open(args))
+            {
+                if (token.Type == ArgumentTokenType.Value && found)
+                {
+                    count++;
+                    continue;
+                }
+
+                switch (token.Type)
+                {
+                    case ArgumentTokenType.Long:
+                    case ArgumentTokenType.Short:
+
+                        found = token.Value == name;
+                        break;
+
+                    default:
+                        found = false;
+                        break;
+                }
+            }
+
+            return count;
         }
 
-        public bool Has(string name)
+        public string[] Names()
         {
-            return false;
+            List<string> names = new List<string>();
+
+            foreach (ArgumentToken token in ArgumentReader.Open(args))
+            {
+                switch (token.Type)
+                {
+                    case ArgumentTokenType.Long:
+                    case ArgumentTokenType.Short:
+
+                        names.Add(token.Value);
+                        break;
+                }
+            }
+
+            return names.ToArray();
         }
 
         public Argument Value(int index)
@@ -62,29 +132,130 @@ namespace Pargos
             return values[values.Count + index];
         }
 
-        public string GetString(string name)
+        public Argument Value(string name)
         {
+            bool found = false;
+
+            foreach (ArgumentToken token in ArgumentReader.Open(args))
+            {
+                if (token.Type == ArgumentTokenType.Value && found)
+                {
+                    return new Argument { Value = token.Value };
+                }
+
+                if (found)
+                {
+                    return new Argument { };
+                }
+
+                switch (token.Type)
+                {
+                    case ArgumentTokenType.Long:
+                    case ArgumentTokenType.Short:
+
+                        found = token.Value == name;
+                        break;
+
+                    default:
+                        found = false;
+                        break;
+                }
+            }
+
+            if (found)
+            {
+                return new Argument { };
+            }
+
             return null;
         }
 
-        public string GetString(string name, int index)
+        public Argument Value(string name, int index)
         {
-            return null;
+            bool found = false;
+            List<Argument> values = new List<Argument>();
+
+            foreach (ArgumentToken token in ArgumentReader.Open(args))
+            {
+                if (token.Type == ArgumentTokenType.Value && found)
+                {
+                    values.Add(new Argument { Value = token.Value });
+                    continue;
+                }
+
+                switch (token.Type)
+                {
+                    case ArgumentTokenType.Long:
+                    case ArgumentTokenType.Short:
+
+                        found = token.Value == name;
+                        break;
+
+                    default:
+                        found = false;
+                        break;
+                }
+            }
+
+            if (index >= values.Count)
+            {
+                return null;
+            }
+
+            if (index < -values.Count)
+            {
+                return null;
+            }
+
+            if (index >= 0)
+            {
+                return values[index];
+            }
+
+            return values[values.Count + index];
         }
 
-        public int GetInt32(int index)
+        public ArgumentCollection Scope(string prefix)
         {
-            return 0;
-        }
+            bool found = false;
+            int length = prefix.Length;
+            List<string> data = new List<string>();
 
-        public int GetInt32(int index, IFormatProvider provider)
-        {
-            return 0;
-        }
+            foreach (ArgumentToken token in ArgumentReader.Open(args))
+            {
+                if (token.Type == ArgumentTokenType.Value && found)
+                {
+                    data.Add(token.Value);
+                    continue;
+                }
 
-        public int GetInt32(string name)
-        {
-            return 0;
+                switch (token.Type)
+                {
+                    case ArgumentTokenType.Long:
+
+                        if (token.Value == prefix)
+                        {
+                            found = true;
+                        }
+                        else if (token.Value.StartsWith(prefix + "-"))
+                        {
+                            found = true;
+                            data.Add("-" + token.Value.Substring(length));
+                        }
+                        else
+                        {
+                            found = false;
+                        }
+
+                        break;
+
+                    default:
+                        found = false;
+                        break;
+                }
+            }
+
+            return new ArgumentCollection(data.ToArray());
         }
     }
 }

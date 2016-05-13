@@ -7,9 +7,20 @@ namespace Pargos.Tests
     public class AvailabilityTests
     {
         [Test]
-        public void CheckingArgumentByIndexShouldReturnTrue()
+        public void HasOnGitUsageShouldReturnFalse()
         {
-            string[] args = { "abc", "cde" };
+            string[] args = GitFixture.Usage;
+            ArgumentCollection collection = ArgumentFactory.Parse(args);
+
+            bool result = collection.Has(0);
+
+            result.Should().BeFalse();
+        }
+
+        [Test]
+        public void HasOnGitPullShouldReturnTrue()
+        {
+            string[] args = GitFixture.Pull;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
             bool result = collection.Has(0);
@@ -18,31 +29,20 @@ namespace Pargos.Tests
         }
 
         [Test]
-        public void CheckingArgumentByIndexShouldReturnFalse()
+        public void HasOnGitPullShouldReturnFalse()
         {
-            string[] args = { "abc", "cde" };
+            string[] args = GitFixture.Pull;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            bool result = collection.Has(2);
+            bool result = collection.Has(3);
 
             result.Should().BeFalse();
         }
 
         [Test]
-        public void CheckingArgumentByShortNameShouldReturnTrue()
+        public void HasOnGitCommitShouldReturnTrue()
         {
-            string[] args = { "-ab", "abc", "--be", "cde" };
-            ArgumentCollection collection = ArgumentFactory.Parse(args);
-
-            bool result = collection.Has("b");
-
-            result.Should().BeTrue();
-        }
-
-        [Test]
-        public void CheckingArgumentByFirstShortNameShouldReturnTrue()
-        {
-            string[] args = { "-ab", "abc", "--be", "cde" };
+            string[] args = GitFixture.Commit;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
             bool result = collection.Has("a");
@@ -51,67 +51,67 @@ namespace Pargos.Tests
         }
 
         [Test]
-        public void CheckingArgumentByLongNameShouldReturnTrue()
+        public void HasOnGitCommitShouldReturnTrueWhenCalledOnAmend()
         {
-            string[] args = { "-ab", "abc", "--be", "cde" };
+            string[] args = GitFixture.Commit;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            bool result = collection.Has("be");
+            bool result = collection.Has("amend");
 
             result.Should().BeTrue();
         }
 
         [Test]
-        public void CheckingArgumentByLongNameShouldReturnFalse()
+        public void HasOnGitResetShouldReturnTrue()
         {
-            string[] args = { "-ab", "abc", "--be", "cde" };
+            string[] args = GitFixture.Reset;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            bool result = collection.Has("ce");
+            bool result = collection.Has("hard");
+
+            result.Should().BeTrue();
+        }
+
+        [Test]
+        public void HasOnGitResetShouldReturnFalse()
+        {
+            string[] args = GitFixture.Reset;
+            ArgumentCollection collection = ArgumentFactory.Parse(args);
+
+            bool result = collection.Has("soft");
 
             result.Should().BeFalse();
         }
 
         [Test]
-        public void CheckingArgumentByLongNameWithoutValuesShouldReturnTrue()
+        public void HasOnGitCommitShouldReturnFalseWhenCalledOnAmendWithIndex()
         {
-            string[] args = { "-ab", "abc", "--be" };
+            string[] args = GitFixture.Commit;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            bool result = collection.Has("be");
-
-            result.Should().BeTrue();
-        }
-
-        [Test]
-        public void CheckingArgumentByNameAndIndexShouldReturnFalseWhenNameIsNotAvailable()
-        {
-            string[] args = { "-ab", "abc", "--be", "cde" };
-            ArgumentCollection collection = ArgumentFactory.Parse(args);
-
-            bool result = collection.Has("ce", 0);
+            bool result = collection.Has("amend", 0);
 
             result.Should().BeFalse();
         }
 
         [Test]
-        public void CheckingArgumentByNameAndIndexShouldReturnTrueWhenIndexIsAvailable()
+        public void HasOnGitCommitShouldReturnTrueWhenCalledOnMessageWithIndex()
         {
-            string[] args = { "-ab", "abc", "--be", "cde" };
+            string[] args = GitFixture.Commit;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            bool result = collection.Has("be", 0);
+            bool result = collection.Has("m", 0);
 
             result.Should().BeTrue();
         }
 
         [Test]
-        public void CheckingArgumentByNameAndIndexShouldReturnFalseWhenIndexIsNotAvailable()
+        public void HasOnGitCommitShouldReturnFalseWhenCalledOnAddWithIndex()
         {
-            string[] args = { "-ab", "abc", "--be", "cde" };
+            string[] args = GitFixture.Commit;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            bool result = collection.Has("be", 1);
+            bool result = collection.Has("a", 0);
 
             result.Should().BeFalse();
         }

@@ -7,20 +7,20 @@ namespace Pargos.Tests
     public class NumericIndexTests
     {
         [Test]
-        public void GetValueByIndexShouldReturnIt()
+        public void GetValueOnGitCommitShouldReturnIt()
         {
-            string[] args = { "abc", "cde" };
+            string[] args = GitFixture.Commit;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
             Argument argument = collection.Value(0);
 
-            argument.Value.Should().Be("abc");
+            argument.Value.Should().Be("commit");
         }
 
         [Test]
-        public void GetValueByIndexShouldReturnNull()
+        public void GetValueOnGitCommitShouldReturnNull()
         {
-            string[] args = { "abc", "cde" };
+            string[] args = GitFixture.Commit;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
             Argument argument = collection.Value(2);
@@ -29,23 +29,23 @@ namespace Pargos.Tests
         }
 
         [Test]
-        public void GetValueByNegativeIndexShouldReturnIt()
+        public void GetValueOnGitPullShouldReturnIt()
         {
-            string[] args = { "abc", "cde" };
+            string[] args = GitFixture.Pull;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
             Argument argument = collection.Value(-1);
 
-            argument.Value.Should().Be("cde");
+            argument.Value.Should().Be("master");
         }
 
         [Test]
-        public void GetValueByNegativeIndexShouldReturnNull()
+        public void GetValueOnGitPullShouldReturnNull()
         {
-            string[] args = { "abc", "cde" };
+            string[] args = GitFixture.Pull;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            Argument argument = collection.Value(-3);
+            Argument argument = collection.Value(-4);
 
             argument.Should().BeNull();
         }

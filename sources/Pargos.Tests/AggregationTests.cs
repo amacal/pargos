@@ -7,9 +7,9 @@ namespace Pargos.Tests
     public class AggregationTests
     {
         [Test]
-        public void AnyShouldReturnFalse()
+        public void AnyOnGitUsageShouldReturnFalse()
         {
-            string[] args = { };
+            string[] args = GitFixture.Usage;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
             bool any = collection.Any();
@@ -18,9 +18,9 @@ namespace Pargos.Tests
         }
 
         [Test]
-        public void AnyShouldReturnTrue()
+        public void AnyOnGitPullShouldReturnTrue()
         {
-            string[] args = { "abc", "cde" };
+            string[] args = GitFixture.Pull;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
             bool any = collection.Any();
@@ -29,9 +29,9 @@ namespace Pargos.Tests
         }
 
         [Test]
-        public void CountShouldReturnZero()
+        public void CountOnGitUsageShouldReturnZero()
         {
-            string[] args = { };
+            string[] args = GitFixture.Usage;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
             int count = collection.Count();
@@ -40,25 +40,25 @@ namespace Pargos.Tests
         }
 
         [Test]
-        public void CountShouldReturnTwo()
+        public void CountOnGitPullShouldReturnThree()
         {
-            string[] args = { "abc", "cde" };
+            string[] args = GitFixture.Pull;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
             int count = collection.Count();
 
-            count.Should().Be(2);
+            count.Should().Be(3);
         }
 
         [Test]
-        public void CountShouldIgnoreNamedArguments()
+        public void CountOnGitCommitShouldIgnoreNamedArguments()
         {
-            string[] args = { "-ab", "abc", "--be", "cde" };
+            string[] args = GitFixture.Commit;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
             int count = collection.Count();
 
-            count.Should().Be(0);
+            count.Should().Be(1);
         }
 
         [Test]

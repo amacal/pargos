@@ -7,9 +7,9 @@ namespace Pargos.Tests
     public class ScopeTests
     {
         [Test]
-        public void ScopeFromNothingShouldHaveNoArguments()
+        public void ScopeOnGitUsageShouldBeEmpty()
         {
-            string[] args = { };
+            string[] args = GitFixture.Usage;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
             ArgumentCollection scope = collection.Scope("abc");
@@ -19,63 +19,15 @@ namespace Pargos.Tests
         }
 
         [Test]
-        public void ScopeFromNotAvailableNameShouldHaveNoArguments()
+        public void ScopeOnGitCommitShouldHaveSomething()
         {
-            string[] args = { "abc", "-a", "--ab" };
+            string[] args = GitFixture.Commit;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            ArgumentCollection scope = collection.Scope("abc");
+            ArgumentCollection scope = collection.Scope("no");
             bool any = scope.Any();
 
-            any.Should().BeFalse();
-        }
-
-        [Test]
-        public void ScopeFromNameWithoutValuesShouldHaveNoArguments()
-        {
-            string[] args = { "abc", "--abc", "--ab" };
-            ArgumentCollection collection = ArgumentFactory.Parse(args);
-
-            ArgumentCollection scope = collection.Scope("abc");
-            bool any = scope.Any();
-
-            any.Should().BeFalse();
-        }
-
-        [Test]
-        public void ScopeFromNameWithValuesShouldHaveTwoArguments()
-        {
-            string[] args = { "abc", "--abc", "1", "2", "--ab" };
-            ArgumentCollection collection = ArgumentFactory.Parse(args);
-
-            ArgumentCollection scope = collection.Scope("abc");
-            int count = scope.Count();
-
-            count.Should().Be(2);
-        }
-
-        [Test]
-        public void ScopeFromNestedNamesShouldContainIt()
-        {
-            string[] args = { "abc", "--abc", "1", "--abc-test", "--ab" };
-            ArgumentCollection collection = ArgumentFactory.Parse(args);
-
-            ArgumentCollection scope = collection.Scope("abc");
-            string[] names = scope.Names();
-
-            names.Should().ContainSingle("test");
-        }
-
-        [Test]
-        public void ScopeFromNestedNamesShouldNotConsiderNamesWithoutDash()
-        {
-            string[] args = { "abc", "--abc", "1", "--abctest", "--ab" };
-            ArgumentCollection collection = ArgumentFactory.Parse(args);
-
-            ArgumentCollection scope = collection.Scope("abc");
-            string[] names = scope.Names();
-
-            names.Should().BeEmpty();
+            any.Should().BeTrue();
         }
     }
 }

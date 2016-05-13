@@ -7,9 +7,9 @@ namespace Pargos.Tests
     public class NamedIndexTests
     {
         [Test]
-        public void GetValueByFirstShortNameShouldReturnNull()
+        public void ValueOnGitCommitShouldReturnNullWhenCalledOnAdd()
         {
-            string[] args = { "-ab", "abc", "--be", "cde" };
+            string[] args = GitFixture.Commit;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
             Argument argument = collection.Value("a");
@@ -18,80 +18,69 @@ namespace Pargos.Tests
         }
 
         [Test]
-        public void GetValueBySecondShortNameShouldReturnIt()
+        public void ValueOnGitCommitShouldReturnItWhenCalledOnMessage()
         {
-            string[] args = { "-ab", "abc", "--be", "cde" };
+            string[] args = GitFixture.Commit;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            Argument argument = collection.Value("b");
+            Argument argument = collection.Value("m");
 
-            argument.Value.Should().Be("abc");
+            argument.Value.Should().Be("Great feature");
         }
 
         [Test]
-        public void GetValueByLongNameShouldReturnIt()
+        public void ValueOnGitConfigShouldReturnIt()
         {
-            string[] args = { "-a", "abc", "--be", "cde" };
+            string[] args = GitFixture.Config;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            Argument argument = collection.Value("be");
+            Argument argument = collection.Value("add");
 
-            argument.Value.Should().Be("cde");
+            argument.Value.Should().Be("user.email");
         }
 
         [Test]
-        public void GetValueByNameAndIndexShouldReturnIt()
+        public void ValueOnGitConfigShouldReturnItWhenCalledWithIndex()
         {
-            string[] args = { "-a", "abc", "--be", "cde", "efg" };
+            string[] args = GitFixture.Config;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            Argument argument = collection.Value("be", 1);
+            Argument argument = collection.Value("add", 1);
 
-            argument.Value.Should().Be("efg");
+            argument.Value.Should().Be("me@example.com");
         }
 
         [Test]
-        public void GetValueByNameAndIndexShouldReturnNullWhenIndexIsNotAvailable()
+        public void ValueOnGitConfigShouldReturnNullWhenNotAvailable()
         {
-            string[] args = { "-a", "abc", "--be" };
+            string[] args = GitFixture.Config;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            Argument argument = collection.Value("be", 0);
+            Argument argument = collection.Value("add", 2);
 
             argument.Should().BeNull();
         }
 
         [Test]
-        public void GetValueByNameAndIndexShouldReturnNull()
+        public void ValueOnGitConfigShouldReturnNullWhenNotAvailableWithNegativeIndex()
         {
-            string[] args = { "-a", "abc", "--be", "cde" };
+            string[] args = GitFixture.Config;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            Argument argument = collection.Value("be", 2);
+            Argument argument = collection.Value("add", -3);
 
             argument.Should().BeNull();
         }
 
         [Test]
-        public void getValueByNegativeIndexShouldReturnIt()
+        public void ValueOnGitConfigShouldReturnItWhenCalledNegativeIndex()
         {
-            string[] args = { "-a", "abc", "--be", "cde", "efg" };
+            string[] args = GitFixture.Config;
             ArgumentCollection collection = ArgumentFactory.Parse(args);
 
-            Argument argument = collection.Value("be", -1);
+            Argument argument = collection.Value("add", -1);
 
-            argument.Value.Should().Be("efg");
-        }
-
-        [Test]
-        public void GetValueByNameAndNegativeIndexShouldReturnNull()
-        {
-            string[] args = { "-a", "abc", "--be", "cde" };
-            ArgumentCollection collection = ArgumentFactory.Parse(args);
-
-            Argument argument = collection.Value("be", -3);
-
-            argument.Should().BeNull();
+            argument.Value.Should().Be("me@example.com");
         }
     }
 }

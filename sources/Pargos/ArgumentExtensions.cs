@@ -24,6 +24,16 @@ namespace Pargos
             return collection.Value(index).SelectOrDefault(x => x.Value);
         }
 
+        public static string GetString(this ArgumentCollection collection, string name)
+        {
+            return collection.Value(name).SelectOrDefault(x => x.Value);
+        }
+
+        public static string GetString(this ArgumentCollection collection, string name, int index)
+        {
+            return collection.Value(name, index).SelectOrDefault(x => x.Value);
+        }
+
         private static T SelectOrDefault<T>(this Argument argument, Func<Argument, T> selector)
         {
             return argument != null ? selector.Invoke(argument) : default(T);

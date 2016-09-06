@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Pargos
+namespace Pargos.Core
 {
     public class ArgumentCollection
     {

@@ -1,4 +1,4 @@
-﻿namespace Pargos
+﻿namespace Pargos.Core
 {
     internal enum ArgumentTokenType
     {

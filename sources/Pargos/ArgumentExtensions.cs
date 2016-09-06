@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pargos
+namespace Pargos.Core
 {
     public static class ArgumentExtensions
     {

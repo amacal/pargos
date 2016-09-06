@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 
-namespace Pargos.Tests
+namespace Pargos.Core.Tests
 {
     [TestFixture]
     public class StringTests

@@ -1,4 +1,4 @@
-﻿namespace Pargos.Tests
+﻿namespace Pargos.Core.Tests
 {
     public static class GitFixture
     {

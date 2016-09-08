@@ -2,7 +2,7 @@
 {
     public static class ArgumentFactory
     {
-        public static ArgumentCollection Parse(string[] args)
+        public static ArgumentCollection Parse(params string[] args)
         {
             return new ArgumentCollection(args);
         }

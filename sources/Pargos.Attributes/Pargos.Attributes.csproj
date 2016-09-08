@@ -33,7 +33,29 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BooleanOption.cs" />
+    <Compile Include="Converters\DefaultBooleanConverter.cs" />
+    <Compile Include="ConvertOption.cs" />
+    <Compile Include="Handlers\BooleanItemHandler.cs" />
+    <Compile Include="Handlers\StringArrayHandler.cs" />
+    <Compile Include="Handlers\StringItemHandler.cs" />
+    <Compile Include="IndexOptionAttribute.cs" />
+    <Compile Include="NamedOptionAttribute.cs" />
+    <Compile Include="OptionAttribute.cs" />
+    <Compile Include="OptionConverter.cs" />
+    <Compile Include="OptionHandler.cs" />
+    <Compile Include="OptionInstance.cs" />
+    <Compile Include="OptionReflector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RangeOptionAttribute.cs" />
+    <Compile Include="VerbAttribute.cs" />
+    <Compile Include="VerbReflector.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Pargos\Pargos.Core.csproj">
+      <Project>{b43d0e94-0855-4897-9c9f-142a533b4c8a}</Project>
+      <Name>Pargos.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

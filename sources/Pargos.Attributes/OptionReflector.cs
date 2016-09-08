@@ -10,6 +10,7 @@ namespace Pargos.Attributes
         private static class Handlers
         {
             public static readonly OptionHandler BooleanItem;
+            public static readonly OptionHandler IntegerItem;
 
             public static readonly OptionHandler StringItem;
             public static readonly OptionHandler StringArray;
@@ -17,6 +18,7 @@ namespace Pargos.Attributes
             static Handlers()
             {
                 BooleanItem = new BooleanItemHandler();
+                IntegerItem = new IntegerItemHandler();
                 StringItem = new StringItemHandler();
                 StringArray = new StringArrayHandler();
             }
@@ -24,11 +26,13 @@ namespace Pargos.Attributes
 
         private static class Converters
         {
-            public static readonly OptionConverter BooleanItem;
+            public static readonly OptionConverter BooleanConverter;
+            public static readonly OptionConverter IntegerConverter;
 
             static Converters()
             {
-                BooleanItem = new DefaultBooleanConverter();
+                BooleanConverter = new DefaultBooleanConverter();
+                IntegerConverter = new DefaultIntegerConverter();
             }
         }
 
@@ -56,6 +60,9 @@ namespace Pargos.Attributes
             if (property.PropertyType == typeof(bool))
                 return Handlers.BooleanItem;
 
+            if (property.PropertyType == typeof(int))
+                return Handlers.IntegerItem;
+
             if (property.PropertyType == typeof(string))
                 return Handlers.StringItem;
 
@@ -73,7 +80,10 @@ namespace Pargos.Attributes
             }
 
             if (property.PropertyType == typeof(bool))
-                return Converters.BooleanItem;
+                return Converters.BooleanConverter;
+
+            if (property.PropertyType == typeof(int))
+                return Converters.IntegerConverter;
 
             return null;
         }

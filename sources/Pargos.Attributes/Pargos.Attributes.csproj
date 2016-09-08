@@ -35,8 +35,10 @@
   <ItemGroup>
     <Compile Include="BooleanOption.cs" />
     <Compile Include="Converters\DefaultBooleanConverter.cs" />
+    <Compile Include="Converters\DefaultIntegerConverter.cs" />
     <Compile Include="ConvertOption.cs" />
     <Compile Include="Handlers\BooleanItemHandler.cs" />
+    <Compile Include="Handlers\IntegerItemHandler.cs" />
     <Compile Include="Handlers\StringArrayHandler.cs" />
     <Compile Include="Handlers\StringItemHandler.cs" />
     <Compile Include="IndexOptionAttribute.cs" />

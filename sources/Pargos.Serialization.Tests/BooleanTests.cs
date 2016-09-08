@@ -8,7 +8,7 @@ namespace Pargos.Serialization.Tests
     [TestFixture]
     public class BooleanTests
     {
-        public class LeakOptions
+        public class Options
         {
             [NamedOption("enabled")]
             [BooleanOption("yes", "no")]
@@ -19,7 +19,7 @@ namespace Pargos.Serialization.Tests
         public void ShouldUseTrueOption()
         {
             ArgumentCollection arguments = ArgumentFactory.Parse("--enabled", "yes");
-            LeakOptions options = arguments.Deserialize<LeakOptions>();
+            Options options = arguments.Deserialize<Options>();
 
             options.Should().NotBeNull();
             options.Enabled.Should().BeTrue();
@@ -29,7 +29,7 @@ namespace Pargos.Serialization.Tests
         public void ShouldUseFalseOption()
         {
             ArgumentCollection arguments = ArgumentFactory.Parse("--enabled", "no");
-            LeakOptions options = arguments.Deserialize<LeakOptions>();
+            Options options = arguments.Deserialize<Options>();
 
             options.Should().NotBeNull();
             options.Enabled.Should().BeFalse();
@@ -39,7 +39,7 @@ namespace Pargos.Serialization.Tests
         public void ShouldUseDefaultOption()
         {
             ArgumentCollection arguments = ArgumentFactory.Parse("--enabled");
-            LeakOptions options = arguments.Deserialize<LeakOptions>();
+            Options options = arguments.Deserialize<Options>();
 
             options.Should().NotBeNull();
             options.Enabled.Should().BeTrue();
@@ -49,7 +49,7 @@ namespace Pargos.Serialization.Tests
         public void ShouldUseNoneOption()
         {
             ArgumentCollection arguments = ArgumentFactory.Parse();
-            LeakOptions options = arguments.Deserialize<LeakOptions>();
+            Options options = arguments.Deserialize<Options>();
 
             options.Should().NotBeNull();
             options.Enabled.Should().BeFalse();
@@ -59,7 +59,7 @@ namespace Pargos.Serialization.Tests
         public void ShouldIgnoreOption()
         {
             ArgumentCollection arguments = ArgumentFactory.Parse("--enabled", "nothing");
-            LeakOptions options = arguments.Deserialize<LeakOptions>();
+            Options options = arguments.Deserialize<Options>();
 
             options.Should().NotBeNull();
             options.Enabled.Should().BeFalse();

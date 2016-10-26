@@ -3,7 +3,7 @@ using NUnit.Framework;
 
 namespace Pargos.Tests
 {
-    public class GitBasics
+    public static class GitBasics
     {
         public class InitializeRepositoryInAnExistingDirectory
         {
@@ -202,7 +202,7 @@ namespace Pargos.Tests
 
             public CommittingYourChanges()
             {
-                argument = Argument.Parse("commit", "-m", @"""Story 182: Fix benchmarks for speed""");
+                argument = Argument.Parse("commit", "-m", "Story 182: Fix benchmarks for speed");
             }
 
             [Test]
@@ -244,7 +244,7 @@ namespace Pargos.Tests
             [Test]
             public void HasRequestedValue()
             {
-                argument["m"].Should().Contain(@"""Story 182: Fix benchmarks for speed""");
+                argument["m"].Should().Contain("Story 182: Fix benchmarks for speed");
             }
         }
 

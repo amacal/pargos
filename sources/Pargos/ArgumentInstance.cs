@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Pargos
@@ -35,7 +34,33 @@ namespace Pargos
 
         public override IEnumerable<string> this[string name]
         {
-            get { return data.SkipWhile(IsNotOption(name)).Skip(1); }
+            get
+            {
+                bool inside = false;
+
+                foreach (string value in data)
+                {
+                    if (IsVerb(value) == false)
+                    {
+                        inside = false;
+                    }
+
+                    if (inside)
+                    {
+                        yield return value;
+                    }
+
+                    if (IsLong(value) && ToLong(value) == name)
+                    {
+                        inside = true;
+                    }
+
+                    if (IsShort(value) && ToShort(value).LastOrDefault() == name)
+                    {
+                        inside = true;
+                    }
+                }
+            }
         }
 
         private static bool IsVerb(string value)
@@ -48,16 +73,6 @@ namespace Pargos
             return value.StartsWith("-") && value.StartsWith("--") == false;
         }
 
-        private static bool IsShortOption(string value, string name)
-        {
-            return IsShort(value) && ToShort(value).Contains(name);
-        }
-
-        private static bool IsLongOption(string value, string name)
-        {
-            return IsLong(value) && ToLong(value) == name;
-        }
-
         private static bool IsLong(string value)
         {
             return value.StartsWith("--") && value.Length > 2;
@@ -66,11 +81,6 @@ namespace Pargos
         private static bool IsNotTailSeparator(string value)
         {
             return value != "--";
-        }
-
-        private static Func<string, bool> IsNotOption(string name)
-        {
-            return value => IsShortOption(value, name) == false && IsLongOption(value, name) == false;
         }
 
         private static IEnumerable<string> ToShort(string value)

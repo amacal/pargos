@@ -34,8 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Argument.cs" />
-    <Compile Include="ArgumentInstance.cs" />
-    <Compile Include="ArgumentExtensions.cs" />
+    <Compile Include="ArgumentView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

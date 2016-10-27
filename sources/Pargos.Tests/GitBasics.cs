@@ -11,7 +11,7 @@ namespace Pargos.Tests
 
             public InitializeRepositoryInAnExistingDirectory()
             {
-                argument = Argument.Parse("init");
+                argument = new Argument("init");
             }
 
             [Test]
@@ -39,7 +39,7 @@ namespace Pargos.Tests
 
             public CloningAnExistingRepository()
             {
-                argument = Argument.Parse("clone", "https://github.com/libgit2/libgit2", "mylibgit");
+                argument = new Argument("clone", "https://github.com/libgit2/libgit2", "mylibgit");
             }
 
             [Test]
@@ -70,7 +70,7 @@ namespace Pargos.Tests
 
             public CheckingTheStatusOfYourFiles()
             {
-                argument = Argument.Parse("status");
+                argument = new Argument("status");
             }
 
             [Test]
@@ -98,7 +98,7 @@ namespace Pargos.Tests
 
             public TrackingNewFiles()
             {
-                argument = Argument.Parse("add", "README");
+                argument = new Argument("add", "README");
             }
 
             [Test]
@@ -128,7 +128,7 @@ namespace Pargos.Tests
 
             public ShortStatus()
             {
-                argument = Argument.Parse("status", "-s");
+                argument = new Argument("status", "-s");
             }
 
             [Test]
@@ -162,7 +162,7 @@ namespace Pargos.Tests
 
             public ViewingYourStagedAndUnstagedChanges()
             {
-                argument = Argument.Parse("diff", "--staged");
+                argument = new Argument("diff", "--staged");
             }
 
             [Test]
@@ -202,7 +202,7 @@ namespace Pargos.Tests
 
             public CommittingYourChanges()
             {
-                argument = Argument.Parse("commit", "-m", "Story 182: Fix benchmarks for speed");
+                argument = new Argument("commit", "-m", "Story 182: Fix benchmarks for speed");
             }
 
             [Test]
@@ -254,7 +254,7 @@ namespace Pargos.Tests
 
             public ViewingTheCommitHistory()
             {
-                argument = Argument.Parse("log", "--pretty", @"format:""%h - %an, %ar : %s""");
+                argument = new Argument("log", "--pretty", @"format:""%h - %an, %ar : %s""");
             }
 
             [Test]
@@ -306,7 +306,7 @@ namespace Pargos.Tests
 
             public LimitingTheOutput()
             {
-                argument = Argument.Parse("log", "--since", "2.weeks");
+                argument = new Argument("log", "--since", "2.weeks");
             }
 
             [Test]
@@ -358,7 +358,7 @@ namespace Pargos.Tests
 
             public UndoingThings()
             {
-                argument = Argument.Parse("commit", "--amend");
+                argument = new Argument("commit", "--amend");
             }
 
             [Test]
@@ -404,7 +404,7 @@ namespace Pargos.Tests
 
             public UnmodifyingAModifiedFile()
             {
-                argument = Argument.Parse("checkout", "--", "CONTRIBUTING.md");
+                argument = new Argument("checkout", "--", "CONTRIBUTING.md");
             }
 
             [Test]

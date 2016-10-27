@@ -8,34 +8,36 @@ namespace Pargos.Tests
         public class BranchesInANutshell
         {
             private readonly Argument argument;
+            private readonly ArgumentView view;
 
             public BranchesInANutshell()
             {
-                argument = Argument.Parse("--git", "a/lib/simplegit.rb", "b/lib/simplegit.rb");
+                argument = new Argument("--git", "a/lib/simplegit.rb", "b/lib/simplegit.rb");
+                view = new ArgumentView(argument);
             }
 
             [Test]
             public void HasNoVerb()
             {
-                argument.HasVerbs().Should().BeFalse();
+                view.HasVerbs().Should().BeFalse();
             }
 
             [Test]
             public void HasOptions()
             {
-                argument.HasOptions().Should().BeTrue();
+                view.HasOptions().Should().BeTrue();
             }
 
             [Test]
             public void HasTwoOptions()
             {
-                argument.CountOptions("git").Should().Be(2);
+                view.CountOptions("git").Should().Be(2);
             }
 
             [Test]
             public void HasRequestedOption()
             {
-                argument.HasOptions("git").Should().BeTrue();
+                view.HasOptions("git").Should().BeTrue();
             }
 
             [Test]
@@ -43,7 +45,7 @@ namespace Pargos.Tests
             [TestCase(1, "b/lib/simplegit.rb")]
             public void HasRequestedValue(int index, string value)
             {
-                argument.GetOption("git", index).Should().Be(value);
+                view.GetOption("git", index).Should().Be(value);
             }
         }
     }

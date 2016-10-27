@@ -8,10 +8,12 @@ namespace Pargos.Tests
         public class BranchesInANutshell
         {
             private readonly Argument argument;
+            private readonly ArgumentView view;
 
             public BranchesInANutshell()
             {
-                argument = Argument.Parse("add", "README", "test.rb", "LICENSE");
+                argument = new Argument("add", "README", "test.rb", "LICENSE");
+                view = new ArgumentView(argument);
             }
 
             [Test]
@@ -21,13 +23,13 @@ namespace Pargos.Tests
             [TestCase(3)]
             public void HasVerb(int index)
             {
-                argument.HasVerbs(index).Should().BeTrue();
+                view.HasVerbs(index).Should().BeTrue();
             }
 
             [Test]
             public void HasFourVerbs()
             {
-                argument.CountVerbs().Should().Be(4);
+                view.CountVerbs().Should().Be(4);
             }
 
             [Test]
@@ -37,47 +39,49 @@ namespace Pargos.Tests
             [TestCase(3, "LICENSE")]
             public void HasRequestedVerb(int index, string verb)
             {
-                argument.GetVerb(index).Should().Be(verb);
+                view.GetVerb(index).Should().Be(verb);
             }
         }
 
         public class CreatingANewBranch
         {
             private readonly Argument argument;
+            private readonly ArgumentView view;
 
             public CreatingANewBranch()
             {
-                argument = Argument.Parse("log", "--oneline", "--decorate");
+                argument = new Argument("log", "--oneline", "--decorate");
+                view = new ArgumentView(argument);
             }
 
             [Test]
             public void HasAnyVerb()
             {
-                argument.HasVerbs().Should().BeTrue();
+                view.HasVerbs().Should().BeTrue();
             }
 
             [Test]
             public void HasOneVerb()
             {
-                argument.CountVerbs().Should().Be(1);
+                view.CountVerbs().Should().Be(1);
             }
 
             [Test]
             public void HasRequestedVerb()
             {
-                argument.GetVerb().Should().Be("log");
+                view.GetVerb().Should().Be("log");
             }
 
             [Test]
             public void HasOptions()
             {
-                argument.HasOptions().Should().BeTrue();
+                view.HasOptions().Should().BeTrue();
             }
 
             [Test]
             public void HasTwoOptions()
             {
-                argument.CountOptions().Should().Be(2);
+                view.CountOptions().Should().Be(2);
             }
 
             [Test]
@@ -85,7 +89,7 @@ namespace Pargos.Tests
             [TestCase("decorate")]
             public void HasRequestedOptions(string name)
             {
-                argument.HasOptions(name).Should().BeTrue();
+                view.HasOptions(name).Should().BeTrue();
             }
 
             [Test]
@@ -93,47 +97,49 @@ namespace Pargos.Tests
             [TestCase("decorate")]
             public void HasNotRequestedData(string name)
             {
-                argument.HasOptions(name, 0).Should().BeFalse();
+                view.HasOptions(name, 0).Should().BeFalse();
             }
         }
 
         public class SwitchingBranches
         {
             private readonly Argument argument;
+            private readonly ArgumentView view;
 
             public SwitchingBranches()
             {
-                argument = Argument.Parse("commit", "-am", "made a change");
+                argument = new Argument("commit", "-am", "made a change");
+                view = new ArgumentView(argument);
             }
 
             [Test]
             public void HasAnyVerb()
             {
-                argument.HasVerbs().Should().BeTrue();
+                view.HasVerbs().Should().BeTrue();
             }
 
             [Test]
             public void HasOneVerb()
             {
-                argument.CountVerbs().Should().Be(1);
+                view.CountVerbs().Should().Be(1);
             }
 
             [Test]
             public void HasRequestedVerb()
             {
-                argument.GetVerb().Should().Be("commit");
+                view.GetVerb().Should().Be("commit");
             }
 
             [Test]
             public void HasOptions()
             {
-                argument.HasOptions().Should().BeTrue();
+                view.HasOptions().Should().BeTrue();
             }
 
             [Test]
             public void HasTwoOptions()
             {
-                argument.CountOptions().Should().Be(2);
+                view.CountOptions().Should().Be(2);
             }
 
             [Test]
@@ -141,7 +147,7 @@ namespace Pargos.Tests
             [TestCase("m")]
             public void HasRequestedOptions(string name)
             {
-                argument.HasOptions(name).Should().BeTrue();
+                view.HasOptions(name).Should().BeTrue();
             }
 
             [Test]
@@ -149,72 +155,74 @@ namespace Pargos.Tests
             [TestCase("m", 1)]
             public void HasNotRequestedData(string name, int index)
             {
-                argument.HasOptions(name, index).Should().BeFalse();
+                view.HasOptions(name, index).Should().BeFalse();
             }
 
             [Test]
             [TestCase("m", 0)]
             public void HasRequestedData(string name, int index)
             {
-                argument.HasOptions(name, index).Should().BeTrue();
+                view.HasOptions(name, index).Should().BeTrue();
             }
 
             [Test]
             public void HasRequestedValue()
             {
-                argument.GetOption("m").Should().Be("made a change");
+                view.GetOption("m").Should().Be("made a change");
             }
         }
 
         public class TrackingBranches
         {
             private readonly Argument argument;
+            private readonly ArgumentView view;
 
             public TrackingBranches()
             {
-                argument = Argument.Parse("checkout", "--track", "origin/serverfix");
+                argument = new Argument("checkout", "--track", "origin/serverfix");
+                view = new ArgumentView(argument);
             }
 
             [Test]
             public void HasAnyVerb()
             {
-                argument.HasVerbs().Should().BeTrue();
+                view.HasVerbs().Should().BeTrue();
             }
 
             [Test]
             public void HasOneVerb()
             {
-                argument.CountVerbs().Should().Be(1);
+                view.CountVerbs().Should().Be(1);
             }
 
             [Test]
             public void HasRequestedVerb()
             {
-                argument.GetVerb().Should().Be("checkout");
+                view.GetVerb().Should().Be("checkout");
             }
 
             [Test]
             public void HasOptions()
             {
-                argument.HasOptions().Should().BeTrue();
+                view.HasOptions().Should().BeTrue();
             }
 
             [Test]
             public void HasRequestedOption()
             {
-                argument.HasOptions("track").Should().BeTrue();
+                view.HasOptions("track").Should().BeTrue();
             }
 
             [Test]
             public void HasRequestedData()
             {
-                argument.HasOptions("track", 0).Should().BeTrue();
+                view.HasOptions("track", 0).Should().BeTrue();
             }
 
             [Test]
             public void HasRequestedValue()
             {
-                argument.GetOption("track").Should().Be("origin/serverfix");
+                view.GetOption("track").Should().Be("origin/serverfix");
             }
         }
     }

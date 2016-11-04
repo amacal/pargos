@@ -11,25 +11,31 @@ namespace Pargos.Tests
 
             public InitializeRepositoryInAnExistingDirectory()
             {
-                argument = new Argument("init");
+                argument = Argument.Parse("init");
             }
 
             [Test]
-            public void HasAnyVerb()
+            public void HasOneParameter()
             {
-                argument.Verbs.Should().NotBeEmpty();
+                argument.Parameters.Should().Be(1);
             }
 
             [Test]
-            public void HasOneVerb()
+            public void HasRequestedParameter()
             {
-                argument.Verbs.Should().HaveCount(1);
+                argument[0].Should().Be("init");
             }
 
             [Test]
-            public void HasRequestedVerb()
+            public void HasNoOptions()
             {
-                argument.Verbs.Should().Contain("init");
+                argument.Options.Should().Be(0);
+            }
+
+            [Test]
+            public void HasNoTail()
+            {
+                argument.Tail.Should().Be(0);
             }
         }
 
@@ -39,28 +45,34 @@ namespace Pargos.Tests
 
             public CloningAnExistingRepository()
             {
-                argument = new Argument("clone", "https://github.com/libgit2/libgit2", "mylibgit");
+                argument = Argument.Parse("clone", "https://github.com/libgit2/libgit2", "mylibgit");
             }
 
             [Test]
-            public void HasAnyVerb()
+            public void HasThreeParameters()
             {
-                argument.Verbs.Should().NotBeEmpty();
-            }
-
-            [Test]
-            public void HasThreeVerbs()
-            {
-                argument.Verbs.Should().HaveCount(3);
+                argument.Parameters.Should().Be(3);
             }
 
             [Test]
             [TestCase(0, "clone")]
             [TestCase(1, "https://github.com/libgit2/libgit2")]
             [TestCase(2, "mylibgit")]
-            public void HasRequestedVerb(int index, string verb)
+            public void HasRequestedParameters(int index, string parameter)
             {
-                argument.Verbs.Should().HaveElementAt(index, verb);
+                argument[index].Should().Be(parameter);
+            }
+
+            [Test]
+            public void HasNoOptions()
+            {
+                argument.Options.Should().Be(0);
+            }
+
+            [Test]
+            public void HasNoTail()
+            {
+                argument.Tail.Should().Be(0);
             }
         }
 
@@ -70,55 +82,38 @@ namespace Pargos.Tests
 
             public CheckingTheStatusOfYourFiles()
             {
-                argument = new Argument("status");
+                argument = Argument.Parse("status", "--cached");
             }
 
             [Test]
-            public void HasAnyVerb()
+            public void HasOneParameter()
             {
-                argument.Verbs.Should().NotBeEmpty();
+                argument.Parameters.Should().Be(1);
             }
 
             [Test]
-            public void HasOneVerb()
+            public void HasRequestedParameter()
             {
-                argument.Verbs.Should().HaveCount(1);
+                argument[0].Should().Be("status");
             }
 
             [Test]
-            public void HasRequestedVerb()
+            public void HasOneOption()
             {
-                argument.Verbs.Should().Contain("status");
-            }
-        }
-
-        public class TrackingNewFiles
-        {
-            private readonly Argument argument;
-
-            public TrackingNewFiles()
-            {
-                argument = new Argument("add", "README");
+                argument.Options.Should().Be(1);
             }
 
             [Test]
-            public void HasAnyVerb()
+            public void HasRequestedOption()
             {
-                argument.Verbs.Should().NotBeEmpty();
+                argument["--cached"].Should().NotBeNull();
+                argument["--cached"].Should().BeEmpty();
             }
 
             [Test]
-            public void HasTwoVerbs()
+            public void HasNoTail()
             {
-                argument.Verbs.Should().HaveCount(2);
-            }
-
-            [Test]
-            [TestCase(0, "add")]
-            [TestCase(1, "README")]
-            public void HasRequestedVerb(int index, string verb)
-            {
-                argument.Verbs.Should().HaveElementAt(index, verb);
+                argument.Tail.Should().Be(0);
             }
         }
 
@@ -128,71 +123,38 @@ namespace Pargos.Tests
 
             public ShortStatus()
             {
-                argument = new Argument("status", "-s");
+                argument = Argument.Parse("status", "-s");
             }
 
             [Test]
-            public void HasAnyVerb()
+            public void HasOneParameter()
             {
-                argument.Verbs.Should().NotBeEmpty();
+                argument.Parameters.Should().Be(1);
             }
 
             [Test]
-            public void HasOneVerbs()
+            public void HasRequestedParameter()
             {
-                argument.Verbs.Should().HaveCount(1);
+                argument[0].Should().Be("status");
             }
 
             [Test]
-            public void HasOneShortOption()
+            public void HasOneOption()
             {
-                argument.Short.Should().HaveCount(1);
+                argument.Options.Should().Be(1);
             }
 
             [Test]
-            public void HasRequestedShortOption()
+            public void HasRequestedOption()
             {
-                argument.Short.Should().Contain("s");
-            }
-        }
-
-        public class ViewingYourStagedAndUnstagedChanges
-        {
-            private readonly Argument argument;
-
-            public ViewingYourStagedAndUnstagedChanges()
-            {
-                argument = new Argument("diff", "--staged");
+                argument["-s"].Should().NotBeNull();
+                argument["-s"].Should().BeEmpty();
             }
 
             [Test]
-            public void HasAnyVerb()
+            public void HasNoTail()
             {
-                argument.Verbs.Should().NotBeEmpty();
-            }
-
-            [Test]
-            public void HasOneVerbs()
-            {
-                argument.Verbs.Should().HaveCount(1);
-            }
-
-            [Test]
-            public void HasNoShortOption()
-            {
-                argument.Short.Should().BeEmpty();
-            }
-
-            [Test]
-            public void HasOneLongOption()
-            {
-                argument.Long.Should().HaveCount(1);
-            }
-
-            [Test]
-            public void HasRequestedLongOption()
-            {
-                argument.Long.Should().Contain("staged");
+                argument.Tail.Should().Be(0);
             }
         }
 
@@ -202,49 +164,39 @@ namespace Pargos.Tests
 
             public CommittingYourChanges()
             {
-                argument = new Argument("commit", "-m", "Story 182: Fix benchmarks for speed");
+                argument = Argument.Parse("commit", "-m", "Story 182: Fix benchmarks for speed");
             }
 
             [Test]
-            public void HasAnyVerb()
+            public void HasOneParameter()
             {
-                argument.Verbs.Should().NotBeEmpty();
+                argument.Parameters.Should().Be(1);
             }
 
             [Test]
-            public void HasOneVerbs()
+            public void HasRequestedParameter()
             {
-                argument.Verbs.Should().HaveCount(1);
+                argument[0].Should().Be("commit");
             }
 
             [Test]
-            public void HasOneShortOption()
+            public void HasOneOption()
             {
-                argument.Short.Should().HaveCount(1);
+                argument.Options.Should().Be(1);
             }
 
             [Test]
-            public void HasRequestedShortOption()
+            public void HasRequestedOption()
             {
-                argument.Short.Should().Contain("m");
+                argument["-m"].Should().NotBeNull();
+                argument["-m"].Should().HaveCount(1);
+                argument["-m"].Should().Contain("Story 182: Fix benchmarks for speed");
             }
 
             [Test]
-            public void HasNoLongOption()
+            public void HasNoTail()
             {
-                argument.Long.Should().BeEmpty();
-            }
-
-            [Test]
-            public void HasOneValue()
-            {
-                argument["m"].Should().HaveCount(1);
-            }
-
-            [Test]
-            public void HasRequestedValue()
-            {
-                argument["m"].Should().Contain("Story 182: Fix benchmarks for speed");
+                argument.Tail.Should().Be(0);
             }
         }
 
@@ -254,147 +206,39 @@ namespace Pargos.Tests
 
             public ViewingTheCommitHistory()
             {
-                argument = new Argument("log", "--pretty", @"format:""%h - %an, %ar : %s""");
+                argument = Argument.Parse("log", "--pretty", @"format:""%h - %an, %ar : %s""");
             }
 
             [Test]
-            public void HasAnyVerb()
+            public void HasOneParameter()
             {
-                argument.Verbs.Should().NotBeEmpty();
+                argument.Parameters.Should().Be(1);
             }
 
             [Test]
-            public void HasOneVerbs()
+            public void HasRequestedParameter()
             {
-                argument.Verbs.Should().HaveCount(1);
+                argument[0].Should().Be("log");
             }
 
             [Test]
-            public void HasNoShortOption()
+            public void HasOneOption()
             {
-                argument.Short.Should().BeEmpty();
+                argument.Options.Should().Be(1);
             }
 
             [Test]
-            public void HasOneLongOption()
+            public void HasRequestedOption()
             {
-                argument.Long.Should().HaveCount(1);
+                argument["--pretty"].Should().NotBeNull();
+                argument["--pretty"].Should().HaveCount(1);
+                argument["--pretty"].Should().Contain(@"format:""%h - %an, %ar : %s""");
             }
 
             [Test]
-            public void HasRequestedLongOption()
+            public void HasNoTail()
             {
-                argument.Long.Should().Contain("pretty");
-            }
-
-            [Test]
-            public void HasOneValue()
-            {
-                argument["pretty"].Should().HaveCount(1);
-            }
-
-            [Test]
-            public void HasRequestedValue()
-            {
-                argument["pretty"].Should().Contain(@"format:""%h - %an, %ar : %s""");
-            }
-        }
-
-        public class LimitingTheOutput
-        {
-            private readonly Argument argument;
-
-            public LimitingTheOutput()
-            {
-                argument = new Argument("log", "--since", "2.weeks");
-            }
-
-            [Test]
-            public void HasAnyVerb()
-            {
-                argument.Verbs.Should().NotBeEmpty();
-            }
-
-            [Test]
-            public void HasOneVerbs()
-            {
-                argument.Verbs.Should().HaveCount(1);
-            }
-
-            [Test]
-            public void HasNoShortOption()
-            {
-                argument.Short.Should().BeEmpty();
-            }
-
-            [Test]
-            public void HasOneLongOption()
-            {
-                argument.Long.Should().HaveCount(1);
-            }
-
-            [Test]
-            public void HasRequestedLongOption()
-            {
-                argument.Long.Should().Contain("since");
-            }
-
-            [Test]
-            public void HasOneValue()
-            {
-                argument["since"].Should().HaveCount(1);
-            }
-
-            [Test]
-            public void HasRequestedValue()
-            {
-                argument["since"].Should().Contain("2.weeks");
-            }
-        }
-
-        public class UndoingThings
-        {
-            private readonly Argument argument;
-
-            public UndoingThings()
-            {
-                argument = new Argument("commit", "--amend");
-            }
-
-            [Test]
-            public void HasAnyVerb()
-            {
-                argument.Verbs.Should().NotBeEmpty();
-            }
-
-            [Test]
-            public void HasOneVerbs()
-            {
-                argument.Verbs.Should().HaveCount(1);
-            }
-
-            [Test]
-            public void HasNoShortOption()
-            {
-                argument.Short.Should().BeEmpty();
-            }
-
-            [Test]
-            public void HasOneLongOption()
-            {
-                argument.Long.Should().HaveCount(1);
-            }
-
-            [Test]
-            public void HasRequestedLongOption()
-            {
-                argument.Long.Should().Contain("amend");
-            }
-
-            [Test]
-            public void HasNoValue()
-            {
-                argument["amend"].Should().BeEmpty();
+                argument.Tail.Should().Be(0);
             }
         }
 
@@ -404,43 +248,37 @@ namespace Pargos.Tests
 
             public UnmodifyingAModifiedFile()
             {
-                argument = new Argument("checkout", "--", "CONTRIBUTING.md");
+                argument = Argument.Parse("checkout", "--", "CONTRIBUTING.md");
             }
 
             [Test]
-            public void HasAnyVerb()
+            public void HasOneParameter()
             {
-                argument.Verbs.Should().NotBeEmpty();
+                argument.Parameters.Should().Be(1);
             }
 
             [Test]
-            public void HasOneVerbs()
+            public void HasRequestedParameter()
             {
-                argument.Verbs.Should().HaveCount(1);
+                argument[0].Should().Be("checkout");
             }
 
             [Test]
-            public void HasNoShortOption()
+            public void HasNoOption()
             {
-                argument.Short.Should().BeEmpty();
-            }
-
-            [Test]
-            public void HasNoLongOption()
-            {
-                argument.Long.Should().BeEmpty();
+                argument.Options.Should().Be(0);
             }
 
             [Test]
             public void HasOneTail()
             {
-                argument.Tail.Should().HaveCount(1);
+                argument.Tail.Should().Be(1);
             }
 
             [Test]
             public void HasRequestedTail()
             {
-                argument.Tail.Should().Contain("CONTRIBUTING.md");
+                argument[-1].Should().Be("CONTRIBUTING.md");
             }
         }
     }

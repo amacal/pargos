@@ -8,44 +8,30 @@ namespace Pargos.Tests
         public class BranchesInANutshell
         {
             private readonly Argument argument;
-            private readonly ArgumentView view;
 
             public BranchesInANutshell()
             {
-                argument = new Argument("--git", "a/lib/simplegit.rb", "b/lib/simplegit.rb");
-                view = new ArgumentView(argument);
+                argument = Argument.Parse("--git", "a/lib/simplegit.rb", "b/lib/simplegit.rb");
             }
 
             [Test]
-            public void HasNoVerb()
+            public void HasNoParameter()
             {
-                view.HasVerbs().Should().BeFalse();
+                argument.Parameters.Should().Be(0);
             }
 
             [Test]
-            public void HasOptions()
+            public void HasOneOption()
             {
-                view.HasOptions().Should().BeTrue();
+                argument.Options.Should().Be(1);
             }
 
             [Test]
-            public void HasTwoOptions()
+            [TestCase("--git", "a/lib/simplegit.rb")]
+            [TestCase("--git", "b/lib/simplegit.rb")]
+            public void HasRequestedOptions(string index, string option)
             {
-                view.CountOptions("git").Should().Be(2);
-            }
-
-            [Test]
-            public void HasRequestedOption()
-            {
-                view.HasOptions("git").Should().BeTrue();
-            }
-
-            [Test]
-            [TestCase(0, "a/lib/simplegit.rb")]
-            [TestCase(1, "b/lib/simplegit.rb")]
-            public void HasRequestedValue(int index, string value)
-            {
-                view.GetOption("git", index).Should().Be(value);
+                argument[index].Should().Contain(option);
             }
         }
     }

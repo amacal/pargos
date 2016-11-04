@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using System.Linq;
 
 namespace Pargos.Tests
 {
@@ -8,28 +9,16 @@ namespace Pargos.Tests
         public class BranchesInANutshell
         {
             private readonly Argument argument;
-            private readonly ArgumentView view;
 
             public BranchesInANutshell()
             {
-                argument = new Argument("add", "README", "test.rb", "LICENSE");
-                view = new ArgumentView(argument);
+                argument = Argument.Parse("add", "README", "test.rb", "LICENSE");
             }
 
             [Test]
-            [TestCase(0)]
-            [TestCase(1)]
-            [TestCase(2)]
-            [TestCase(3)]
-            public void HasVerb(int index)
+            public void HasFourParameters()
             {
-                view.HasVerbs(index).Should().BeTrue();
-            }
-
-            [Test]
-            public void HasFourVerbs()
-            {
-                view.CountVerbs().Should().Be(4);
+                argument.Parameters.Should().Be(4);
             }
 
             [Test]
@@ -37,192 +26,163 @@ namespace Pargos.Tests
             [TestCase(1, "README")]
             [TestCase(2, "test.rb")]
             [TestCase(3, "LICENSE")]
-            public void HasRequestedVerb(int index, string verb)
+            public void HasRequestedParameter(int index, string parameter)
             {
-                view.GetVerb(index).Should().Be(verb);
+                argument[index].Should().Be(parameter);
+            }
+
+            [Test]
+            public void HasNoOption()
+            {
+                argument.Options.Should().Be(0);
+            }
+
+            [Test]
+            public void HasNoTail()
+            {
+                argument.Tail.Should().Be(0);
             }
         }
 
         public class CreatingANewBranch
         {
             private readonly Argument argument;
-            private readonly ArgumentView view;
 
             public CreatingANewBranch()
             {
-                argument = new Argument("log", "--oneline", "--decorate");
-                view = new ArgumentView(argument);
+                argument = Argument.Parse("log", "--oneline", "--decorate");
             }
 
             [Test]
-            public void HasAnyVerb()
+            public void HasOneParameter()
             {
-                view.HasVerbs().Should().BeTrue();
+                argument.Parameters.Should().Be(1);
             }
 
             [Test]
-            public void HasOneVerb()
+            public void HasRequestedParameter()
             {
-                view.CountVerbs().Should().Be(1);
-            }
-
-            [Test]
-            public void HasRequestedVerb()
-            {
-                view.GetVerb().Should().Be("log");
-            }
-
-            [Test]
-            public void HasOptions()
-            {
-                view.HasOptions().Should().BeTrue();
+                argument[0].Should().Be("log");
             }
 
             [Test]
             public void HasTwoOptions()
             {
-                view.CountOptions().Should().Be(2);
+                argument.Options.Should().Be(2);
             }
 
             [Test]
-            [TestCase("oneline")]
-            [TestCase("decorate")]
-            public void HasRequestedOptions(string name)
+            [TestCase("--oneline")]
+            [TestCase("--decorate")]
+            public void HasRequestedOptions(string option)
             {
-                view.HasOptions(name).Should().BeTrue();
+                argument[option].Should().NotBeNull();
             }
 
             [Test]
-            [TestCase("oneline")]
-            [TestCase("decorate")]
-            public void HasNotRequestedData(string name)
+            [TestCase("--oneline")]
+            [TestCase("--decorate")]
+            public void HasNotRequestedData(string option)
             {
-                view.HasOptions(name, 0).Should().BeFalse();
+                argument[option].Should().BeEmpty();
             }
         }
 
         public class SwitchingBranches
         {
             private readonly Argument argument;
-            private readonly ArgumentView view;
 
             public SwitchingBranches()
             {
-                argument = new Argument("commit", "-am", "made a change");
-                view = new ArgumentView(argument);
+                argument = Argument.Parse("commit", "-am", "made a change");
             }
 
             [Test]
-            public void HasAnyVerb()
+            public void HasOneParameter()
             {
-                view.HasVerbs().Should().BeTrue();
+                argument.Parameters.Should().Be(1);
             }
 
             [Test]
-            public void HasOneVerb()
+            public void HasRequestedParameter()
             {
-                view.CountVerbs().Should().Be(1);
-            }
-
-            [Test]
-            public void HasRequestedVerb()
-            {
-                view.GetVerb().Should().Be("commit");
-            }
-
-            [Test]
-            public void HasOptions()
-            {
-                view.HasOptions().Should().BeTrue();
+                argument[0].Should().Be("commit");
             }
 
             [Test]
             public void HasTwoOptions()
             {
-                view.CountOptions().Should().Be(2);
+                argument.Options.Should().Be(2);
             }
 
             [Test]
-            [TestCase("a")]
-            [TestCase("m")]
-            public void HasRequestedOptions(string name)
+            [TestCase("-a")]
+            [TestCase("-m")]
+            public void HasRequestedOptions(string option)
             {
-                view.HasOptions(name).Should().BeTrue();
+                argument[option].Should().NotBeNull();
             }
 
             [Test]
-            [TestCase("a", 0)]
-            [TestCase("m", 1)]
-            public void HasNotRequestedData(string name, int index)
+            [TestCase("-a", 0)]
+            [TestCase("-m", 1)]
+            public void HasNotRequestedData(string option, int index)
             {
-                view.HasOptions(name, index).Should().BeFalse();
+                argument[option].ElementAtOrDefault(index).Should().BeNull();
             }
 
             [Test]
-            [TestCase("m", 0)]
-            public void HasRequestedData(string name, int index)
+            [TestCase("-m", 0)]
+            public void HasRequestedData(string option, int index)
             {
-                view.HasOptions(name, index).Should().BeTrue();
+                argument[option].ElementAtOrDefault(index).Should().NotBeNull();
             }
 
             [Test]
             public void HasRequestedValue()
             {
-                view.GetOption("m").Should().Be("made a change");
+                argument["-m"].Should().Contain("made a change");
             }
         }
 
         public class TrackingBranches
         {
             private readonly Argument argument;
-            private readonly ArgumentView view;
 
             public TrackingBranches()
             {
-                argument = new Argument("checkout", "--track", "origin/serverfix");
-                view = new ArgumentView(argument);
+                argument = Argument.Parse("checkout", "--track", "origin/serverfix");
             }
 
             [Test]
-            public void HasAnyVerb()
+            public void HasOneParameter()
             {
-                view.HasVerbs().Should().BeTrue();
+                argument.Parameters.Should().Be(1);
             }
 
             [Test]
-            public void HasOneVerb()
+            public void HasRequestedParameter()
             {
-                view.CountVerbs().Should().Be(1);
+                argument[0].Should().Be("checkout");
             }
 
             [Test]
-            public void HasRequestedVerb()
+            public void HasOneOption()
             {
-                view.GetVerb().Should().Be("checkout");
-            }
-
-            [Test]
-            public void HasOptions()
-            {
-                view.HasOptions().Should().BeTrue();
+                argument.Options.Should().Be(1);
             }
 
             [Test]
             public void HasRequestedOption()
             {
-                view.HasOptions("track").Should().BeTrue();
+                argument["--track"].Should().NotBeNull();
+                argument["--track"].Should().HaveCount(1);
             }
 
             [Test]
             public void HasRequestedData()
             {
-                view.HasOptions("track", 0).Should().BeTrue();
-            }
-
-            [Test]
-            public void HasRequestedValue()
-            {
-                view.GetOption("track").Should().Be("origin/serverfix");
+                argument["--track"].Should().Contain("origin/serverfix");
             }
         }
     }

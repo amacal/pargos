@@ -33,8 +33,20 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AfterAttribute.cs" />
     <Compile Include="Argument.cs" />
-    <Compile Include="ArgumentView.cs" />
+    <Compile Include="ArgumentIndexable.cs" />
+    <Compile Include="ArgumentIndexableRange.cs" />
+    <Compile Include="ArgumentIndexableList.cs" />
+    <Compile Include="ArgumentInstance.cs" />
+    <Compile Include="ArgumentParser.cs" />
+    <Compile Include="ArgumentRoutine.cs" />
+    <Compile Include="ArgumentSerializer.cs" />
+    <Compile Include="AtAttribute.cs" />
+    <Compile Include="OptionAttribute.cs" />
+    <Compile Include="ParameterAttribute.cs" />
+    <Compile Include="MatchAttribute.cs" />
+    <Compile Include="PresenceAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

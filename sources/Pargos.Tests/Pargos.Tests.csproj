@@ -47,9 +47,11 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EchoExamples.cs" />
     <Compile Include="GitBasics.cs" />
     <Compile Include="GitBranching.cs" />
     <Compile Include="GitTools.cs" />
+    <Compile Include="NpmExamples.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

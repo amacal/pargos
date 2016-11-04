@@ -45,9 +45,7 @@ Target "CreatePackage" (fun _ ->
             WorkingDir = "./build/release"
             Dependencies = []
             Files = [
-                "Pargos.Core.dll", Some "lib\\net45", None
-                "Pargos.Attributes.dll", Some "lib\\net45", None
-                "Pargos.Serialization.dll", Some "lib\\net45", None
+                "Pargos.dll", Some "lib\\net45", None
             ]
             Publish = false }) "./build/build.nuspec"
 )
